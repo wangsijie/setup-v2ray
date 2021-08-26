@@ -1,0 +1,30 @@
+name: Setup v2ray
+description: install v2ray and runs in background
+inputs:
+  config-base64:
+    description: 'base64 encoded config.json'
+    required: true
+  v2ray-version:
+    description: 'version number of v2ray'
+    required: false
+    default: "4.34.0"
+runs:
+  using: "composite"
+  steps:
+    - name: download v2ray
+      shell: bash
+      run: |
+        mkdir -p .v2ray
+        cd .v2ray
+        wget -q https://github.com/v2fly/v2ray-core/releases/download/v${{ inputs.v2ray-version }}/v2ray-linux-64.zip
+        unzip v2ray-linux-64.zip
+        chmod +x v2ray v2ctl
+    - name: write config file
+      shell: bash
+      run: |
+        cd .v2ray
+        echo "${{ secrets.CONFIG }}" > config_enc.json
+        cat config_enc.json | base64 -d > config.json
+    - name: start v2ray
+      shell: bash
+      run: .v2ray/v2ray --config=.v2ray/config.json > v2ray.log &

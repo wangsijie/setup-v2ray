@@ -6,20 +6,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
-    - name: download v2ray
-      run: |
-        mkdir -p .v2ray
-        cd .v2ray
-        wget -q https://github.com/v2fly/v2ray-core/releases/download/v4.34.0/v2ray-linux-64.zip
-        unzip v2ray-linux-64.zip
-        chmod +x v2ray v2ctl
-    - name: write config file
-      run: |
-        cd .v2ray
-        echo "${{ secrets.CONFIG }}" > config_enc.json
-        cat config_enc.json | base64 -d > config.json
-    - name: start v2ray
-      run: .v2ray/v2ray --config=.v2ray/config.json > v2ray.log &
+    - uses: ./
+      with:
+        config-base64: ${{ secrets.CONFIG }}
     - name: Setup upterm session
       uses: lhotari/action-upterm@v1
