@@ -23,7 +23,7 @@ runs:
       shell: bash
       run: |
         cd .v2ray
-        echo "${{ secrets.CONFIG }}" > config_enc.json
+        echo "${{ input.config-base64 }}" > config_enc.json
         cat config_enc.json | base64 -d > config.json
     - name: start v2ray
       shell: bash
