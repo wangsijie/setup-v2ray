@@ -27,4 +27,4 @@ runs:
         cat config_enc.json | base64 -d > config.json
     - name: start v2ray
       shell: bash
-      run: .v2ray/v2ray --config=.v2ray/config.json > v2ray.log &
+      run: .v2ray/v2ray --config=.v2ray/config.json &
