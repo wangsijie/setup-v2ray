@@ -15,7 +15,10 @@ jobs:
         unzip v2ray-linux-64.zip
         chmod +x v2ray v2ctl
     - name: write config file
-      run: echo "${{ secrets.CONFIG }}" > .v2ray/config.json
+      run: |
+        cd .v2ray
+        echo "${{ secrets.CONFIG }}" > config_enc.json
+        cat config_enc.json | base64 -d > config.json
     - name: start v2ray
       run: .v2ray/v2ray --config=.v2ray/config.json > v2ray.log &
     - name: Setup upterm session
